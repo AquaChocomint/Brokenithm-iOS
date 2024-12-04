@@ -307,6 +307,7 @@
     float airHeight = screenHeight * 0.4;
     float airIOHeight = airHeight / 6;
     float sliderIOWidth = screenWidth / 16;
+    float sliderIOHeight = screenHeight - (airEnabled ? airHeight : 0);
     struct ioBuf buf = {0};
     for (UITouch *touch in event.allTouches) {
         UITouchPhase phase = touch.phase;
@@ -348,30 +349,14 @@
                 } else {
                     idx = pointY / airIOHeight;
                 }
-                uint8_t airIdx[] = {4,5,2,3,0,1};
+                uint8_t airIdx[] = {5,4,3,2,1,0};
                 buf.air[airIdx[idx]] = 1;
             } else {
                 float pointPos = pointX / sliderIOWidth;
-                int idx = pointPos;
-                if (idx > 15) idx = 15;
-                int setIdx = idx*2;
-                if (buf.slider[ setIdx ] != 0) {
-                    setIdx++;
-                }
-                buf.slider[ setIdx ] = 0x80;
-                if (idx > 0) { if ((pointPos - idx) * 4 < 1) {
-                    setIdx = (idx - 1) * 2;
-                    if (buf.slider[ setIdx ] != 0) {
-                        setIdx++;
-                    }
-                    buf.slider[ setIdx ] = 0x80;
-                } } else if (idx < 31) { if ((pointPos - idx) * 4 > 3) {
-                    setIdx = (idx + 1) * 2;
-                    if (buf.slider[ setIdx ] != 0) {
-                        setIdx++;
-                    }
-                    buf.slider[ setIdx ] = 0x80;
-                } }
+                bool isHalfUp = (screenHeight - pointY) / sliderIOHeight > 0.5;
+                int idx = 2 * floorf(pointPos) + (isHalfUp ? 0 : 1);
+                buf.slider[ idx ] = 0x80;
+                NSLog(@"idx: %i", idx);
             }
         }
     }
