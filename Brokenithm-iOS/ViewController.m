@@ -15,7 +15,7 @@
 
 @end
 
-#define FUNCTION_MENU_HEIGHT 360.0f
+#define FUNCTION_MENU_HEIGHT 60.0f * 7
 
 @implementation ViewController
 
@@ -26,7 +26,8 @@
         @"enableAir": @YES,
         @"autoPopMenu": @YES,
         @"invertAir": @NO,
-        @"menuDuration": @1.0
+        @"menuDuration": @1.0,
+        @"fullSliderSensors": @YES
     }];
     funcViewOn = YES;
     openCloseEventOnce = NO;
@@ -125,6 +126,23 @@
             [enableAir addSubview:enableAirToggle];
             offset += 60;
             
+            UIView *enableFullSlideSensors;
+            UILabel *enableFullSlideSensorsLabel;
+            enableFullSlideSensors = [[UIView alloc] initWithFrame:CGRectMake(0, offset, 200, 60)];
+            enableFullSlideSensors.backgroundColor = [UIColor blackColor];
+            enableFullSlideSensors.layer.borderColor = [UIColor whiteColor].CGColor;
+            enableFullSlideSensors.layer.borderWidth = 1.0;
+            [functionBtnView addSubview:enableFullSlideSensors];
+            enableFullSlideSensorsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 130, 60)];
+            enableFullSlideSensorsLabel.textAlignment = NSTextAlignmentRight;
+            enableFullSlideSensorsLabel.textColor = [UIColor whiteColor];
+            enableFullSlideSensorsLabel.numberOfLines = 1;
+            enableFullSlideSensorsLabel.text = [[NSBundle mainBundle] localizedStringForKey:@"32 Slide Sensors" value:@"" table:nil];
+            [enableFullSlideSensors addSubview:enableFullSlideSensorsLabel];
+            enableFullSlideSensorToggle = [[UISwitch alloc] initWithFrame:CGRectMake(142, 13, 50, 27)];
+            [enableFullSlideSensors addSubview:enableFullSlideSensorToggle];
+            offset += 60;
+            
             FunctionButton *moreBtn = [[FunctionButton alloc] initAtY:offset];
             offset += 60;
             moreBtn.name = @"more_setting_button";
@@ -202,6 +220,9 @@
     // hold duration
     menuHoldDuration = [NSUserDefaults.standardUserDefaults valueForKey:@"menuDuration"];
     openCloseHold.minimumPressDuration = [menuHoldDuration floatValue];
+    
+    // 32 or 16 slider sensors
+    fullSliderSensors = [NSUserDefaults.standardUserDefaults boolForKey:@"fullSliderSensors"];
 }
 
 -(void)updateLed:(NSData*)rgbData {
@@ -354,7 +375,7 @@
             } else {
                 float pointPos = pointX / sliderIOWidth;
                 bool isHalfUp = (screenHeight - pointY) / sliderIOHeight > 0.5;
-                int idx = 2 * floorf(pointPos) + (isHalfUp ? 0 : 1);
+                int idx = 2 * floorf(pointPos) + (isHalfUp && enableFullSlideSensorToggle.on ? 0 : 1);
                 buf.slider[ idx ] = 0x80;
                 NSLog(@"idx: %i", idx);
             }

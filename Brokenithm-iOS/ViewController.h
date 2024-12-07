@@ -28,9 +28,11 @@
     UIView *functionBtnView;
     UILabel *openCloseBtn;
     UISwitch *enableAirToggle;
+    UISwitch *enableFullSlideSensorToggle;
     BOOL airEnabled;
     BOOL autoPopMenu;
     BOOL invertAir;
+    bool fullSliderSensors;
     NSNumber *menuHoldDuration;
     UILongPressGestureRecognizer *openCloseHold;
     int touchCount;

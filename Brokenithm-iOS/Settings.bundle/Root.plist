@@ -58,6 +58,16 @@
 			<key>MaximumValue</key>
 			<real>2</real>
 		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use 32 slider sensors</string>
+			<key>Key</key>
+			<string>fullSliderSensors</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
 	</array>
 </dict>
 </plist>
