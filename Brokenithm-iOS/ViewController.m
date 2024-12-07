@@ -154,6 +154,7 @@
             
             [self loadPrefs];
             [enableAirToggle addTarget:self action:@selector(enableAirChanged) forControlEvents:UIControlEventValueChanged];
+            [enableFullSlideSensorToggle addTarget:self action:@selector(updateFullSlideSensorState) forControlEvents:UIControlEventValueChanged];
         }
     }
     
@@ -222,9 +223,13 @@
     openCloseHold.minimumPressDuration = [menuHoldDuration floatValue];
     
     // 32 or 16 slider sensors
-    fullSliderSensors = [NSUserDefaults.standardUserDefaults boolForKey:@"fullSliderSensors"];
+    bool ss = [NSUserDefaults.standardUserDefaults boolForKey:@"fullSliderSensors"];
+    [enableFullSlideSensorToggle setOn:ss animated:NO];
 }
-
+-(void)updateFullSlideSensorState {
+    bool value = enableFullSlideSensorToggle.on;
+    [NSUserDefaults.standardUserDefaults setBool:value forKey:@"fullSliderSensors"];
+}
 -(void)updateLed:(NSData*)rgbData {
     if (rgbData.length != 32*3) return;
     NSMutableArray *colorArr = [NSMutableArray arrayWithCapacity:33];
