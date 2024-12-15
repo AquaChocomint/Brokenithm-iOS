@@ -28,7 +28,7 @@
         @"invertAir": @NO,
         @"menuDuration": @1.0,
         @"fullSliderSensors": @YES,
-        @"widthAdjuster": @100
+        @"widthAdjuster": @1.0
     }];
     
     funcViewOn = YES;
