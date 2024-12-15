@@ -68,6 +68,28 @@
 			<key>DefaultValue</key>
 			<true/>
 		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>DefaultValue</key>
+			<string></string>
+			<key>Title</key>
+			<string>Hold slider to adjust width size</string>
+			<key>Key</key>
+			<string>widthAdjusterTitle</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSSliderSpecifier</string>
+			<key>Key</key>
+			<string>widthAdjuster</string>
+			<key>MaximumValue</key>
+			<integer>1</integer>
+			<key>MinimumValue</key>
+			<real>0.01</real>
+			<key>DefaultValue</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 </dict>
 </plist>

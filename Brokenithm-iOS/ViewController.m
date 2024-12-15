@@ -27,8 +27,10 @@
         @"autoPopMenu": @YES,
         @"invertAir": @NO,
         @"menuDuration": @1.0,
-        @"fullSliderSensors": @YES
+        @"fullSliderSensors": @YES,
+        @"widthAdjuster": @100
     }];
+    
     funcViewOn = YES;
     openCloseEventOnce = NO;
     
@@ -43,12 +45,11 @@
      */
     
     // io view
-    CGRect screenSize = [UIScreen mainScreen].bounds;
-    screenWidth = screenSize.size.width;
-    screenHeight = screenSize.size.height;
+    const struct screenInfo info = [self setScreenInfo];
+    
     float sliderHeight = screenHeight;
-    self.airIOView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight*0.4)];
-    self.sliderIOView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, sliderHeight)];
+    self.airIOView = [[UIView alloc] initWithFrame:CGRectMake(info.offsetX, 0, screenWidth, screenHeight*0.4)];
+    self.sliderIOView = [[UIView alloc] initWithFrame:CGRectMake(info.offsetX, 0, screenWidth, sliderHeight)];
     self.airIOView.backgroundColor = [UIColor blackColor];
     self.airIOView.layer.borderWidth = 1.0f;
     self.airIOView.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -264,10 +265,8 @@
 
 -(void)updateAirInverted:(BOOL)invert {
     if (invertAir != invert) {
-        CGRect screenSize = [UIScreen mainScreen].bounds;
-        screenWidth = screenSize.size.width;
-        screenHeight = screenSize.size.height;
-        self.airIOView.frame = CGRectMake(0, invert ? screenHeight * 0.6 : 0, screenWidth, screenHeight * 0.4);
+        const struct screenInfo info = [self setScreenInfo];
+        self.airIOView.frame = CGRectMake(info.offsetX, invert ? screenHeight * 0.6 : 0, screenWidth, screenHeight * 0.4);
         invertAir = invert;
     }
 }
@@ -314,6 +313,23 @@
 -(UIStatusBarStyle) preferredStatusBarStyle { return UIStatusBarStyleLightContent; }
 -(UIEditingInteractionConfiguration)editingInteractionConfiguration { return UIEditingInteractionConfigurationNone; }
 
+-(struct screenInfo) setScreenInfo {
+    CGRect screenSize = [UIScreen mainScreen].bounds;
+    NSNumber *widthAdjust = [NSUserDefaults.standardUserDefaults valueForKey:@"widthAdjuster"];
+    
+    struct screenInfo info = {};
+    info.width = screenSize.size.width;
+    info.widthMagnification = widthAdjust.floatValue;
+    info.adjustedWidth = info.width * info.widthMagnification;
+    info.height = screenSize.size.height;
+    info.size = screenSize;
+    info.offsetX = (info.width - info.adjustedWidth) / 2;
+    
+    screenWidth = info.adjustedWidth;
+    screenHeight = info.height;
+    
+    return info;
+}
 -(void)sendIoBuf:(struct ioBuf*)buf {
     buf->len = sizeof(*buf) - 1;
     buf->head[0] = 'I';

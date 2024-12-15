@@ -58,6 +58,15 @@ struct ioBuf {
     uint8_t serviceBtn;
 };
 
+struct screenInfo {
+    CGRect size;
+    float widthMagnification;
+    float adjustedWidth;
+    float width;
+    float height;
+    float offsetX;
+};
+
 enum {
     BNI_FUNCTION_COIN = 1,
     BNI_FUNCTION_CARD
