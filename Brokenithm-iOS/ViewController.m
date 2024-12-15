@@ -59,7 +59,7 @@
     [self.view addSubview:self.airIOView];
     
     // connect status view
-    connectStatusView = [[UILabel alloc] initWithFrame:CGRectMake(screenWidth - 200.0, screenHeight * 0.1, 200.0, 50.0)];
+    connectStatusView = [[UILabel alloc] initWithFrame:CGRectMake(info.width - 200.0, screenHeight * 0.1, 200.0, 50.0)];
     connectStatusView.userInteractionEnabled = false;
     connectStatusView.text = [[NSBundle mainBundle] localizedStringForKey:@"Not connected" value:@"" table:nil]
     ;
